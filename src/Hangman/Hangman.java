@@ -5,6 +5,27 @@ import java.util.Scanner;
 
 public class Hangman {
     public static void main(String[] args) {
+        boolean playGame = true;
+        Scanner scanner = new Scanner(System.in);
+
+        while (playGame) {
+            System.out.println("HANGMAN");
+            System.out.println("Type \"play\" to play the game, \"exit\" to quit: > ");
+            String choice = scanner.next();
+
+            if ("exit".equalsIgnoreCase(choice)) {
+                playGame = false;
+            } else if ("play".equalsIgnoreCase(choice)) {
+                playHangmanGame();
+            } else {
+                System.out.println("Invalid choice. Please type \"play\" to play or \"exit\" to quit.");
+            }
+        }
+
+        scanner.close();
+    }
+
+    private static void playHangmanGame() {
 
         String[] words = {"python", "java", "javascript", "kotlin"};
 
@@ -70,7 +91,5 @@ public class Hangman {
             System.out.println("You lost!");
             System.out.println("The correct word was: " + secretWord);
         }
-
-        scanner.close();
     }
 }
