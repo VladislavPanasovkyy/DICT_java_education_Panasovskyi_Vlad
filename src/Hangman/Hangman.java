@@ -8,7 +8,6 @@ public class Hangman {
 
         String[] words = {"python", "java", "javascript", "kotlin"};
 
-
         Random random = new Random();
         int randomIndex = random.nextInt(words.length);
         String secretWord = words[randomIndex];
@@ -21,6 +20,8 @@ public class Hangman {
             guessedWord.append("-");
         }
 
+        StringBuilder usedLetters = new StringBuilder();
+
         System.out.println("HANGMAN");
         System.out.println(guessedWord);
 
@@ -30,30 +31,31 @@ public class Hangman {
             System.out.print("Input a letter: > ");
             char letter = scanner.next().charAt(0);
 
-            boolean letterFound = false;
-            for (int i = 0; i < secretWord.length(); i++) {
-                if (secretWord.charAt(i) == letter) {
-                    guessedWord.setCharAt(i, letter);
-                    letterFound = true;
+            if (usedLetters.toString().contains(String.valueOf(letter))) {
+                System.out.println("No improvements");
+            } else if (secretWord.contains(String.valueOf(letter))) {
+                for (int i = 0; i < secretWord.length(); i++) {
+                    if (secretWord.charAt(i) == letter) {
+                        guessedWord.setCharAt(i, letter);
+                    }
                 }
-            }
-
-            if (!letterFound) {
-                remainingAttempts--;
+            } else {
                 System.out.println("That letter doesn't appear in the word");
+                remainingAttempts--;
             }
 
+            usedLetters.append(letter);
             System.out.println(guessedWord);
 
             if (guessedWord.toString().equals(secretWord)) {
-                System.out.println("Thanks for playing!");
-                System.out.println("We'll see how well you did in the next stage");
+                System.out.println("You guessed the word!");
+                System.out.println("You survived!");
                 break;
             }
         }
 
         if (remainingAttempts == 0) {
-            System.out.println("You ran out of attempts!");
+            System.out.println("You lost!");
             System.out.println("The correct word was: " + secretWord);
         }
 
