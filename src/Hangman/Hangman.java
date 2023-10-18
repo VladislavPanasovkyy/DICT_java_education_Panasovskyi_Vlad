@@ -29,10 +29,22 @@ public class Hangman {
 
         while (remainingAttempts > 0) {
             System.out.print("Input a letter: > ");
-            char letter = scanner.next().charAt(0);
+            String input = scanner.next().toLowerCase();
+
+            if (input.length() != 1) {
+                System.out.println("You should input a single letter");
+                continue;
+            }
+
+            char letter = input.charAt(0);
+
+            if (!Character.isLowerCase(letter)) {
+                System.out.println("Please enter a lowercase English letter");
+                continue;
+            }
 
             if (usedLetters.toString().contains(String.valueOf(letter))) {
-                System.out.println("No improvements");
+                System.out.println("You've already guessed this letter");
             } else if (secretWord.contains(String.valueOf(letter))) {
                 for (int i = 0; i < secretWord.length(); i++) {
                     if (secretWord.charAt(i) == letter) {
@@ -48,7 +60,7 @@ public class Hangman {
             System.out.println(guessedWord);
 
             if (guessedWord.toString().equals(secretWord)) {
-                System.out.println("You guessed the word!");
+                System.out.println("You guessed the word " + secretWord + "!");
                 System.out.println("You survived!");
                 break;
             }
