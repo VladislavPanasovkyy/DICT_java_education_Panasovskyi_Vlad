@@ -12,8 +12,18 @@ public class Hangman {
         int randomIndex = random.nextInt(words.length);
         String secretWord = words[randomIndex];
 
+
+        StringBuilder displayWord = new StringBuilder(secretWord.length());
+        for (int i = 0; i < secretWord.length(); i++) {
+            if (i < 2) {
+                displayWord.append(secretWord.charAt(i));
+            } else {
+                displayWord.append("-");
+            }
+        }
+
         System.out.println("HANGMAN");
-        System.out.println("Guess the word: ");
+        System.out.println("Guess the word " + displayWord + ": ");
 
         Scanner scanner = new Scanner(System.in);
 
