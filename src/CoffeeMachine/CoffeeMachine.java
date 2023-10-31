@@ -18,16 +18,24 @@ public class CoffeeMachine {
             String action = scanner.nextLine();
 
             switch (action) {
-                case "buy" -> buyCoffee(scanner);
-                case "fill" -> fillMachine(scanner);
-                case "take" -> takeMoney();
-                case "remaining" -> showResources();
-                case "exit" -> {
+                case "buy":
+                    buyCoffee(scanner);
+                    break;
+                case "fill":
+                    fillMachine(scanner);
+                    break;
+                case "take":
+                    takeMoney();
+                    break;
+                case "remaining":
+                    showResources();
+                    break;
+                case "exit":
                     return;
-                }
             }
         }
     }
+
     public static void buyCoffee(Scanner scanner) {
         while (true) {
             System.out.print("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu: ");
@@ -40,27 +48,26 @@ public class CoffeeMachine {
             int waterNeeded, milkNeeded, coffeeBeansNeeded, cost;
 
             switch (choice) {
-                case "1" -> {  // espresso
+                case "1":  // espresso
                     waterNeeded = 250;
                     milkNeeded = 0;
                     coffeeBeansNeeded = 16;
                     cost = 4;
-                }
-                case "2" -> {  // latte
+                    break;
+                case "2":  // latte
                     waterNeeded = 350;
                     milkNeeded = 75;
                     coffeeBeansNeeded = 20;
                     cost = 7;
-                }
-                case "3" -> {  // cappuccino
+                    break;
+                case "3":  // cappuccino
                     waterNeeded = 200;
                     milkNeeded = 100;
                     coffeeBeansNeeded = 12;
                     cost = 6;
-                }
-                default -> {
+                    break;
+                default:
                     return;
-                }
             }
 
             if (water >= waterNeeded && milk >= milkNeeded && coffeeBeans >= coffeeBeansNeeded && disposableCups > 0) {
@@ -80,6 +87,7 @@ public class CoffeeMachine {
             }
         }
     }
+
     public static void fillMachine(Scanner scanner) {
         System.out.print("Write how many ml of water you want to add: ");
         int addWater = scanner.nextInt();
@@ -95,10 +103,12 @@ public class CoffeeMachine {
         coffeeBeans += addCoffeeBeans;
         disposableCups += addCups;
     }
+
     public static void takeMoney() {
         System.out.println("I gave you $" + money);
         money = 0;
     }
+
     public static void showResources() {
         System.out.println("The coffee machine has:");
         System.out.println(water + " of water");
