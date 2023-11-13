@@ -13,22 +13,61 @@ public class TicTacToe {
                 {' ', ' ', ' '}
         };
 
+        // Зчитування рядка від користувача
         System.out.print("Enter cells: ");
         String input = scanner.nextLine();
 
+        // Перевірка на коректність введених даних
         if (input.length() != 9) {
             System.out.println("Invalid input. Please enter exactly 9 characters.");
             return;
         }
 
+        // Перетворення рядка у двовимірний масив
         fillGameBoard(gameBoard, input);
 
         // Друкуємо ігрове поле
         printGameBoard(gameBoard);
 
-        // Аналіз стану гри та виведення результату
+        // Хід користувача
+        makeMove(scanner, gameBoard);
+
+        // Перевірка стану гри та виведення результату
         printGameResult(gameBoard);
     }
+
+    // для користувача, щоб зробити хід
+    public static void makeMove(Scanner scanner, char[][] gameBoard) {
+        while (true) {
+            System.out.print("Enter the coordinates: ");
+            try {
+                int row = scanner.nextInt();
+                int col = scanner.nextInt();
+
+                // Перевірка коректності координат
+                if (isValidMove(row, col, gameBoard)) {
+                    gameBoard[row - 1][col - 1] = 'X';
+                    break;
+                } else {
+                    System.out.println("This cell is occupied! Choose another one!");
+                }
+            } catch (Exception e) {
+                System.out.println("You should enter numbers!");
+                scanner.nextLine(); // очистка буфера введення
+            }
+        }
+    }
+
+    // для перевірки коректності координат ходу
+    public static boolean isValidMove(int row, int col, char[][] gameBoard) {
+        if (row < 1 || row > 3 || col < 1 || col > 3) {
+            System.out.println("Coordinates should be from 1 to 3!");
+            return false;
+        }
+
+        return gameBoard[row - 1][col - 1] == ' ';
+    }
+
     // для друкування ігрового поля
     public static void printGameBoard(char[][] gameBoard) {
         System.out.println("---------");
@@ -41,7 +80,8 @@ public class TicTacToe {
         }
         System.out.println("---------");
     }
-    // для заповнення ігрового поля
+
+    // для заповнення ігрового поля на основі введеного рядка
     public static void fillGameBoard(char[][] gameBoard, String input) {
         int index = 0;
         for (int row = 0; row < gameBoard.length; row++) {
@@ -57,6 +97,7 @@ public class TicTacToe {
             }
         }
     }
+
     // для аналізу стану гри та виведення результату
     public static void printGameResult(char[][] gameBoard) {
         if (checkImpossible(gameBoard)) {
@@ -71,20 +112,8 @@ public class TicTacToe {
             System.out.println("Game not finished");
         }
     }
-    // для перевірки неможливості гри
-    public static boolean checkImpossible(char[][] gameBoard) {
-        int countX = countSymbol(gameBoard, 'X');
-        int countO = countSymbol(gameBoard, 'O');
 
-        int diff = Math.abs(countX - countO);
-
-        if (diff > 1 || (checkWinner(gameBoard, 'X') && checkWinner(gameBoard, 'O'))) {
-            return true;
-        }
-
-        return false;
-    }
-    // перевірки переможця гри
+    // для перевірки переможця гри
     public static boolean checkWinner(char[][] gameBoard, char symbol) {
         // Перевірка рядків і стовпців
         for (int i = 0; i < 3; i++) {
@@ -102,7 +131,8 @@ public class TicTacToe {
 
         return false;
     }
-    //для перевірки нічиєї
+
+    // для перевірки нічиєї
     public static boolean checkDraw(char[][] gameBoard) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -113,7 +143,22 @@ public class TicTacToe {
         }
         return true;
     }
-    //для підрахунку кількості символів на ігровому полі
+
+    // для перевірки неможливості гри
+    public static boolean checkImpossible(char[][] gameBoard) {
+        int countX = countSymbol(gameBoard, 'X');
+        int countO = countSymbol(gameBoard, 'O');
+
+        int diff = Math.abs(countX - countO);
+
+        if (diff > 1 || (checkWinner(gameBoard, 'X') && checkWinner(gameBoard, 'O'))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    // для підрахунку кількості символів на ігровому полі
     public static int countSymbol(char[][] gameBoard, char symbol) {
         int count = 0;
         for (int i = 0; i < 3; i++) {
