@@ -12,6 +12,7 @@ public class MatrixProcessing {
             System.out.println("3. Multiply matrices");
             System.out.println("4. Transpose matrix");
             System.out.println("5. Calculate a determinant");
+            System.out.println("6. Inverse matrix");
             System.out.println("0. Exit");
             System.out.print("Your choice: > ");
 
@@ -32,6 +33,9 @@ public class MatrixProcessing {
                     break;
                 case 5:
                     calculateDeterminant(scanner);
+                    break;
+                case 6:
+                    inverseMatrix(scanner);
                     break;
                 case 0:
                     System.out.println("Exiting the program.");
@@ -332,5 +336,82 @@ public class MatrixProcessing {
         }
 
         return calculateDeterminant(minorMatrix);
+    }
+    // знаходження зворотної матриці
+
+    private static void inverseMatrix(Scanner scanner) {
+        System.out.print("Enter matrix size: > ");
+        int rows = scanner.nextInt();
+        int cols = scanner.nextInt();
+
+        double[][] matrix = readMatrix(scanner, rows, cols);
+
+        if (calculateDeterminant(matrix) == 0) {
+            System.out.println("This matrix doesn't have an inverse.");
+            return;
+        }
+
+        double[][] inverseMatrix = calculateInverseMatrix(matrix);
+        printMatrix(inverseMatrix);
+    }
+
+    private static double[][] calculateInverseMatrix(double[][] matrix) {
+        int n = matrix.length;
+        double[][] augmentedMatrix = new double[n][2 * n];
+
+        // Додаємо до матриці її копію зправа
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                augmentedMatrix[i][j] = matrix[i][j];
+                augmentedMatrix[i][j + n] = (i == j) ? 1 : 0;
+            }
+        }
+
+        // Приводимо матрицю до верхньої трикутної форми
+        for (int i = 0; i < n; i++) {
+            if (augmentedMatrix[i][i] == 0) {
+                // Обмін рядками, якщо елемент діагоналі дорівнює 0
+                for (int k = i + 1; k < n; k++) {
+                    if (augmentedMatrix[k][i] != 0) {
+                        double[] temp = augmentedMatrix[i];
+                        augmentedMatrix[i] = augmentedMatrix[k];
+                        augmentedMatrix[k] = temp;
+                        break;
+                    }
+                }
+            }
+
+            double divisor = augmentedMatrix[i][i];
+            for (int j = 0; j < 2 * n; j++) {
+                augmentedMatrix[i][j] /= divisor;
+            }
+
+            for (int k = i + 1; k < n; k++) {
+                double factor = augmentedMatrix[k][i];
+                for (int j = 0; j < 2 * n; j++) {
+                    augmentedMatrix[k][j] -= factor * augmentedMatrix[i][j];
+                }
+            }
+        }
+
+        // Приводимо матрицю до розширеної форми Йордана
+        for (int i = n - 1; i > 0; i--) {
+            for (int k = i - 1; k >= 0; k--) {
+                double factor = augmentedMatrix[k][i];
+                for (int j = 0; j < 2 * n; j++) {
+                    augmentedMatrix[k][j] -= factor * augmentedMatrix[i][j];
+                }
+            }
+        }
+
+        // Виділяємо зправа від діагоналі
+        double[][] inverseMatrix = new double[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                inverseMatrix[i][j] = augmentedMatrix[i][j + n];
+            }
+        }
+
+        return inverseMatrix;
     }
 }
