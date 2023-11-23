@@ -7,18 +7,16 @@ public class MatrixProcessing {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-
             System.out.println("1. Add matrices");
             System.out.println("2. Multiply matrix by a constant");
             System.out.println("3. Multiply matrices");
             System.out.println("4. Transpose matrix");
+            System.out.println("5. Calculate a determinant");
             System.out.println("0. Exit");
             System.out.print("Your choice: > ");
 
-            // зчитуємо вибір користувача
             int choice = scanner.nextInt();
 
-            // виконуємо вибрану операцію
             switch (choice) {
                 case 1:
                     addMatrices(scanner);
@@ -31,6 +29,9 @@ public class MatrixProcessing {
                     break;
                 case 4:
                     transposeMatrix(scanner);
+                    break;
+                case 5:
+                    calculateDeterminant(scanner);
                     break;
                 case 0:
                     System.out.println("Exiting the program.");
@@ -267,5 +268,69 @@ public class MatrixProcessing {
         }
 
         return result;
+    }
+
+    // обчислення визначника матриці
+    private static void calculateDeterminant(Scanner scanner) {
+        System.out.print("Enter matrix size: > ");
+        int rows = scanner.nextInt();
+        int cols = scanner.nextInt();
+
+        if (rows != cols) {
+            System.out.println("The matrix must be square to calculate the determinant.");
+            return;
+        }
+
+        double[][] matrix = readMatrix(scanner, rows, cols);
+        double determinant = calculateDeterminant(matrix);
+        System.out.println("The result is: " + determinant);
+    }
+
+    private static double calculateDeterminant(double[][] matrix) {
+        int n = matrix.length;
+        if (n == 1) {
+            return matrix[0][0];
+        }
+
+        if (n == 2) {
+            return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+        }
+
+        double det = 0;
+        for (int i = 0; i < n; i++) {
+            det += matrix[0][i] * cofactor(matrix, 0, i);
+        }
+
+        return det;
+    }
+
+    private static double cofactor(double[][] matrix, int row, int col) {
+        return Math.pow(-1, row + col) * minor(matrix, row, col);
+    }
+
+    private static double minor(double[][] matrix, int row, int col) {
+        int n = matrix.length;
+        double[][] minorMatrix = new double[n - 1][n - 1];
+        int rowIndex = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (i == row) {
+                continue;
+            }
+
+            int colIndex = 0;
+            for (int j = 0; j < n; j++) {
+                if (j == col) {
+                    continue;
+                }
+
+                minorMatrix[rowIndex][colIndex] = matrix[i][j];
+                colIndex++;
+            }
+
+            rowIndex++;
+        }
+
+        return calculateDeterminant(minorMatrix);
     }
 }
