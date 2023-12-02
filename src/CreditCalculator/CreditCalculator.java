@@ -7,28 +7,33 @@ public class CreditCalculator {
         Scanner scanner = new Scanner(System.in);
 
         // Зчитуємо суму кредиту
-        System.out.print("Loan principal: ");
+        System.out.print("Enter the loan principal:\n> ");
         int principal = scanner.nextInt();
 
-        int month = 0;
-        int totalRepaid = 0;
+        // Вибір розрахунку: кількість місяців або щомісячний платіж
+        System.out.print("What do you want to calculate?\ntype \"m\" – for number of monthly payments,\n" +
+                "type \"p\" – for the monthly payment:\n> ");
+        String choice = scanner.next();
 
-        // Цикл, який працює, доки не був повністю погашений кредит
-        while (totalRepaid < principal) {
-            // Зчитуємо суму погашення за місяць
-            System.out.print("Month " + (month + 1) + ": repaid ");
-            int repayment = scanner.nextInt();
+        if ("m".equals(choice)) {
+            // Розрахунок кількості місяців
+            System.out.print("Enter the monthly payment:\n> ");
+            int monthlyPayment = scanner.nextInt();
 
-            // Додаємо суму погашення до загальної суми погашень
-            totalRepaid += repayment;
+            int monthsToRepay = (int) Math.ceil((double) principal / monthlyPayment);
+            System.out.println("It will take " + monthsToRepay + " months to repay the loan");
+        } else if ("p".equals(choice)) {
+            // Розрахунок щомісячного платежу
+            System.out.print("Enter the number of months:\n> ");
+            int numberOfMonths = scanner.nextInt();
 
-            // Інкрементуємо номер місяця
-            month++;
+            double monthlyPayment = (double) principal / numberOfMonths;
+            int lastPayment = principal - (numberOfMonths - 1) * (int) Math.floor(monthlyPayment);
+
+            System.out.println("Your monthly payment = " + (int) Math.ceil(monthlyPayment) +
+                    " and the last payment = " + lastPayment);
         }
-
-        System.out.println("The loan has been repaid!");
 
         scanner.close();
     }
 }
-
